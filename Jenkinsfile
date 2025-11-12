@@ -69,14 +69,6 @@ pipeline {
             }
         }
         
-        stage ("Snapshot Before Security Checks") {
-          steps {
-            script {
-              def appPod = sh(script: "kubectl get pods -l app=flask -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
-              sh "kubectl exec ${appPod} -- python3 snapshot-before-security.py"
-            }
-          }
-        }
 
         stage ("Run Security Checks") {
             steps {
@@ -91,14 +83,6 @@ pipeline {
             }
         }
         
-        stage ("Remove Security Scan Data") {
-          steps {
-            script {
-              def appPod = sh(script: "kubectl get pods -l app=flask -o jsonpath='{.items[0].metadata.name}'", returnStdout: true).trim()
-              sh "kubectl exec ${appPod} -- python3 delete-security-data.py"
-            }
-          }
-        }
 
        stage('Deploy to Prod Environment') {
             steps {
